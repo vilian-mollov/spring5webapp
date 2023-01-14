@@ -18,7 +18,7 @@ public class BootStrapData implements CommandLineRunner {
     private final BookRepository bookRepository;
     private final PublisherRepository publisherRepository;
 
-    public BootStrapData(AuthorRepository authorRepository, BookRepository bookRepository,PublisherRepository publisherRepository) {
+    public BootStrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.publisherRepository = publisherRepository;
@@ -27,46 +27,42 @@ public class BootStrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Author hill = new Author("Napoleon","Hill");
-        Book thinkAndGrowRich = new Book("Think and Grow Rich","954321995-8");
+        System.out.println("Started in Bootstrap");
 
-        hill.getBooks().add(thinkAndGrowRich);
-        thinkAndGrowRich.getAuthors().add(hill);
+        Publisher publisher = new Publisher();
+        publisher.setName("SFG Publishing");
+        publisher.setCity("St Petersburg");
+        publisher.setState("FL");
 
-        Author eric = new Author("Eric","Evans");
-        Book ddd = new Book("Domain Driven Design","978-0321125217");
+        publisherRepository.save(publisher);
 
+        System.out.println("Publisher Count: " + publisherRepository.count());
+
+        Author eric = new Author("Eric", "Evans");
+        Book ddd = new Book("Domain Driven Design", "123123");
         eric.getBooks().add(ddd);
         ddd.getAuthors().add(eric);
 
-        authorRepository.save(hill);
-        bookRepository.save(thinkAndGrowRich);
+        ddd.setPublisher(publisher);
+        publisher.getBooks().add(ddd);
 
         authorRepository.save(eric);
         bookRepository.save(ddd);
+        publisherRepository.save(publisher);
 
-        Author rod = new Author("Rod","Johnson");
-        Book noEJB = new Book("J2EE Development without EJB","978-0764558313");
-
+        Author rod = new Author("Rod", "Johnson");
+        Book noEJB = new Book("J2EE Development without EJB", "3939459459");
         rod.getBooks().add(noEJB);
         noEJB.getAuthors().add(rod);
 
+        noEJB.setPublisher(publisher);
+        publisher.getBooks().add(noEJB);
+
         authorRepository.save(rod);
         bookRepository.save(noEJB);
+        publisherRepository.save(publisher);
 
-        System.out.println("Started in Bootstrap");
         System.out.println("Number of Books: " + bookRepository.count());
-
-
-
-        Publisher adison = new Publisher("Addison-Wesley Professional",
-                "Wall Street 221","New York","Northeastern","Z47-18");
-
-        System.out.println(adison);
-        publisherRepository.save(adison);
-        System.out.println(adison);
-        System.out.println("Publishers in repository: " + publisherRepository.count());
-
-
+        System.out.println("Publisher Number of Books: " + publisher.getBooks().size());
     }
 }
